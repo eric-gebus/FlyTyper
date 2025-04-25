@@ -29,7 +29,7 @@ function Home() {
                             <h3 className="subtitle">Increase your typing speed while racing against others!</h3>
                             <div className="buttons ">
                                 <button className="button is-yellow has-background-link is-large has-text-light ml-4 mt-5 " onClick={soloPlayHandler}>Solo Play</button>
-                                <button className="button has-background-link is-large has-text-light ml-4 mt-5" onClick={QuickPlayHandler}>Quick play</button>
+                                <button className="button has-background-link is-large has-text-light ml-4 mt-5" data-testid="qp-value" onClick={QuickPlayHandler}>Quick play</button>
                             </div>
                         </div>
                         <div data-aos="fade-right" className="column

@@ -4,6 +4,7 @@ import { describe, it, expect } from "vitest";
 import "@testing-library/jest-dom/vitest";
 
 describe ("Footer", () => {
+  
   it("renders copyright", () => {
     render(<Footer />);
     expect(screen.getByText(/© 2025 All Rights Reserved./i)).toBeInTheDocument();
