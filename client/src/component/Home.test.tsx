@@ -33,12 +33,25 @@ describe ("Home", () => {
         await userEvent.click(button);
     })
 
-    it('should call navigate when clicked', async () => {
+    it('should call navigate on Quick PLay when clicked', async () => {
         const button = screen.getByRole("button", {name: /Quick play/i});
 
         await userEvent.click(button);
         
         expect(mockUsedNavigate).toHaveBeenCalledWith('/quickplay');
         
-      });
+    });
+    
+    it('should call navigate on Solo Play when clicked', async () => {
+        const button = screen.getByRole("button", {name: /Solo Play/i});
+
+        await userEvent.click(button);
+        
+        expect(mockUsedNavigate).toHaveBeenCalledWith('/soloplay');
+        
+    });
+
+    it ("should render the image", () => {
+        expect(screen.getByAltText("Nice pic")).toBeInTheDocument(); 
+    })
 })
