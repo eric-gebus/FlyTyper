@@ -8,7 +8,6 @@ const sequelize = new Sequelize({
     host: 'localhost',
     port: 5432,
     ssl: true,
-    clientMinMessages: 'notice', //Ask Liya
     logging: false
 });
 

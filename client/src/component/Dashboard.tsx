@@ -3,7 +3,6 @@ import Home from './Home.tsx';
 import SoloPlay from './SoloPlay.tsx';
 import QuickPlay from './QuickPlay.tsx';
 
-
 const Dashboard = () => {
   return (
     <div className="dashboard">
