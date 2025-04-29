@@ -4,11 +4,17 @@
   background-color: rgb(243, 241, 241);
 }
 
+.navbar-item.custom-hover {
+  border: 1px solid transparent; 
+  transition: all 0.2s ease;
+}
+
 .navbar-item.custom-hover:hover {
   background-color: #758BFD;
   border-radius: 5px;
   border: 1px solid #FF8600;
 }
+
 html, body, #root {
   height: 100%;
   margin: 0;
