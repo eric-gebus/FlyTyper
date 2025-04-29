@@ -11,13 +11,11 @@ function SoloPlay() {
     const [startTime, setStartTime] = useState<number>(0);
 
 
-
     const handleGameFinish = () => {
         setGameFinish(true);
     }
 
     const handleWpm = (currWpm: number) => {
-        // console.log("wpm from parent: ", currWpm);
         setWpm(currWpm);
     }
 
@@ -25,7 +23,6 @@ function SoloPlay() {
         console.log("new progress:", progress);
         setProgress(progress);
     }
-
 
     useEffect(() => {
         fetch('/message.json').then((response) => {
