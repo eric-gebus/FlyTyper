@@ -44,6 +44,7 @@ interface RoomData {
 type Room = Record<string, RoomData>;
 
 const roomData: Room = {};
+const paragraphList = JSON.parse(fs.readFileSync(require.resolve('../message.json'), 'utf-8'));
 
 io.on('connection', (socket: Socket) => {
   //On join room
@@ -67,7 +68,6 @@ io.on('connection', (socket: Socket) => {
               console.log("starting the game");
               roomData[room].gameStarted = true;
           }, countDown * 1000);
-          const paragraphList = JSON.parse(fs.readFileSync(require.resolve('../message.json'), 'utf-8'));
           const randomIndex = Math.floor(Math.random() * paragraphList.length);
           const randomPara = paragraphList[randomIndex].text;
           console.log("random para server: ", randomPara);
@@ -118,13 +118,9 @@ io.on('connection', (socket: Socket) => {
               return users[key].timeTaken
 
           }).sort((a, b) => {
-              console.log("a sort: ", a, "b sort: ", b);
               return users[a].timeTaken ?? 0 - (users[b].timeTaken ?? 0);
-          }).map((userId, index) => {
-              console.log("user from map: ", userId);
-
+          }).forEach((userId, index) => {
               users[userId]["rank"] = index + 1;
-              console.log("user ranks: ", users[userId]["rank"]);
           })
 
           io.to(room).emit('roomData', roomData[room]);
