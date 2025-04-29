@@ -18,7 +18,7 @@ function Home() {
         <section className="hero is-white height dashboard-container content-area  has-background-white-ter ">
             <div className="hero-body ">
                 <div className="container">
-                    <div className="columns reverse-columns mt-4 ">
+                    <div className="columns columns mt-4 ">
                         <div className="column mt-4
           is-10-mobile
           is-10-tablet

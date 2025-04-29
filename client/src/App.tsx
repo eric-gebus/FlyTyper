@@ -7,7 +7,7 @@ import Footer from './component/Footer.tsx';
 function App() {
 
   return (
-    < div className='layout has-background-white-ter'>
+    < div className='layout is-flex is-justify-content-space-between'>
       <Router>
         <Navbar />
         <Dashboard />

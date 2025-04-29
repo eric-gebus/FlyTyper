@@ -39,7 +39,7 @@ function SoloPlay() {
 
     useEffect(() => { //AI
         if (!gameStarted) {
-            const countDown = 10;
+            const countDown = 5;
             const startTime = Date.now() + countDown * 1000;
             setStartTime(startTime);
         }
@@ -67,14 +67,16 @@ function SoloPlay() {
                 <div className="container">
                     <div className="columns">
                         < div className="column is-8 is-offset-2 mt-4">
-                            <h1 className="is-size-2 has-text-weight-semibold is-family-secondary">Solo Play</h1>
+                            <h1 className="is-size-2 has-text-weight-semibold has-text-black is-family-secondary">Solo Play</h1>
                             <div className="columns is-mobile is-vcentered mt-4">
-                                <h4 className="column is-one-quarter">Progress:</h4>
+                                <h4 className="column is-one-quarter has-text-black">Progress:</h4>
                                 <div className="column is-6 ">
                                     <progress className=" progress is-success is-normal has-background-white" value={progress} max={100}/>
                                 </div>
                             </div>
-                            <Typer randomParagraph={randomParagraph} gameFinish={gameFinish} handleGameFinish={handleGameFinish} wpm={wpm} handleWpm={handleWpm} handleProgress={handleProgress} startTime={startTime} gameStarted={gameStarted}/>
+                            <Typer randomParagraph={randomParagraph} gameFinish={gameFinish} 
+                                handleGameFinish={handleGameFinish} wpm={wpm} handleWpm={handleWpm} 
+                                handleProgress={handleProgress} startTime={startTime} gameStarted={gameStarted}/>
                         </div>
                     </div>
                 </div>

@@ -5,7 +5,9 @@
 }
 
 .navbar-item.custom-hover:hover {
-  background-color: rgb(55, 55, 220);
+  background-color: #758BFD;
+  border-radius: 5px;
+  border: 1px solid #FF8600;
 }
 html, body, #root {
   height: 100%;

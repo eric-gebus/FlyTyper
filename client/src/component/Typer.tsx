@@ -24,6 +24,7 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
     const [timeTaken, setTimeTaken] = useState<number>(0);
 
     const initialTime = 3 * 60;
+  
     const inputReference = useRef<HTMLInputElement>(null);
 
     const [timeRemaining, setTimeRemaining] = useState(initialTime);
@@ -169,28 +170,33 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
 
     return (
         <div className="hero-body" >
-            <div className="columns column is-8 has-text-centered  ">
+            <div className="columns column is-8 has-text-centered">
                 {!gameStarted && startTime && (
-                    <h2 className="has-text-weight-semibold is-size-4 has-text-success" >Game starts in: {Math.max(0, Math.floor((startTime - now) / 1000))}s</h2>
+                    <h2 className="has-text-weight-semibold is-size-4 has-text-success">
+                        Game starts in: {Math.max(0, Math.floor((startTime - now) / 1000))}s
+                    </h2>
+                )}{gameStarted && !gameFinish && timeRemaining > 0 && (
+                    <h2 className="has-text-weight-semibold is-size-4 has-text-info">
+                        Game started!
+                    </h2>
                 )}
             </div>
 
             <div>
-                {
-                    gameFinish &&
-                    <div>
-                        <h1 className="has-text-weight-semibold is-size-4 has-text-success">You Finished the race yayy... </h1>
-                        <button className="button is-yellow has-background-link has-text-light is-medium mb-4 " onClick={buttonHandler}>Play Again</button>
-                    </div>
+                {gameFinish &&
+                <div>
+                    <h1 className="has-text-weight-semibold is-size-4 has-text-success">You Finished the race yayy... </h1>
+                    <button className="button is-yellow has-background-link has-text-light is-medium mb-4 " onClick={buttonHandler}>Play Again</button>
+                </div>
                 }
             </div>
+
             <div>
-                {
-                    timeRemaining == 0 &&
-                    <div>
-                        <h1 className="has-text-weight-semibold is-size-4 has-text-danger ">Oopsie... Timeout </h1>
-                        <button className="button is-yellow has-background-link has-text-light is-medium mb-4 " onClick={buttonHandler}>Play Again</button>
-                    </div>
+                {timeRemaining == 0 &&
+                <div>
+                    <h1 className="has-text-weight-semibold is-size-4 has-text-danger ">Oopsie... Timeout </h1>
+                    <button className="button has-background-link has-text-light is-medium m-5 " onClick={buttonHandler}>Play Again</button>
+                </div>
                 }
             </div>
 
@@ -233,16 +239,16 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
 
             <div className="columns  is-mobile mt-4 message">
                 <div className="column is-two-quarters has-text-centered">
-                    <h4 className="message-header has-background-link has-text-white is-centered has-text-weight-semibold">wpm</h4>
-                    <h4 className="message-body has-background-white">{wpm} </h4>
+                    <h4 className="message-header has-background-link has-text-white" style={{ justifyContent: "center" }}>wpm</h4>
+                    <h4 className="message-body has-background-white has-text-black">{wpm} </h4>
                 </div>
                 <div className="column is-two-quarters has-text-centered">
-                    <h4 className="message-header has-background-link has-text-white has-text-centered">Accuracy </h4>
-                    <h4 className="message-body has-background-white">{accuracy}%</h4>
+                    <h4 className="message-header has-background-link has-text-white" style={{ justifyContent: "center" }}>Accuracy </h4>
+                    <h4 className="message-body has-background-white has-text-black">{accuracy}%</h4>
                 </div>
                 <div className="column ">
-                    <h4 className=" message-header has-background-link has-text-white has-text-centered">Time</h4>
-                    <h4 className="message-body has-background-white">{new Date(timeTaken * 60 * 1000).toISOString().substring(14, 19)}</h4>
+                    <h4 className="message-header has-background-link has-text-white" style={{ justifyContent: "center" }}>Time</h4>
+                    <h4 className="message-body has-background-white has-text-black">{new Date(timeTaken * 60 * 1000).toISOString().substring(14, 19)}</h4>
                 </div>
             </div>
         </div>
