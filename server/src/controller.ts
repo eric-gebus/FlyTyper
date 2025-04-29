@@ -26,6 +26,7 @@ io.on('connection', (socket: Socket) => {
   //On join room
   console.log("User connected ", socket.id);
 
+  const paragraphList = JSON.parse(fs.readFileSync(require.resolve('../message.json'), 'utf-8'));
   socket.on('join', async () => {
       let room = Object.keys(roomData)
           .find((key) => {
@@ -44,7 +45,6 @@ io.on('connection', (socket: Socket) => {
               console.log("starting the game");
               roomData[room].gameStarted = true;
           }, countDown * 1000);
-          const paragraphList = JSON.parse(fs.readFileSync(require.resolve('../message.json'), 'utf-8'));
           const randomIndex = Math.floor(Math.random() * paragraphList.length);
           const randomPara = paragraphList[randomIndex].text;
           console.log("random para server: ", randomPara);

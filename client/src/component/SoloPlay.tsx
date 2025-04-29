@@ -32,12 +32,7 @@ function SoloPlay() {
 
     useEffect(() => {
         fetch('/message.json').then((response) => {
-<<<<<<< HEAD
-            response.json()
-            .then((data) => {
-=======
             response.json().then((data: Data[]) => {
->>>>>>> Refactoring
                 setParagraphList(data);
                 const randomIndex = Math.floor(Math.random() * data.length);
                 setRandomParagraph(data[randomIndex].text);
