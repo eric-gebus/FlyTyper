@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Typer from './Typer.tsx'
+import Typer from './Typer'
 
 function SoloPlay() {
     const [paragraphList, setParagraphList] = useState([]);
@@ -71,8 +71,8 @@ function SoloPlay() {
                                     <progress className=" progress is-success is-normal has-background-white" value={progress} max={100}/>
                                 </div>
                             </div>
-                            <Typer randomParagraph={randomParagraph} gameFinish={gameFinish} 
-                                handleGameFinish={handleGameFinish} wpm={wpm} handleWpm={handleWpm} 
+                            <Typer randomParagraph={randomParagraph} gameFinish={gameFinish}
+                                handleGameFinish={handleGameFinish} wpm={wpm} handleWpm={handleWpm}
                                 handleProgress={handleProgress} startTime={startTime} gameStarted={gameStarted}/>
                         </div>
                     </div>
