@@ -26,11 +26,13 @@ function SoloPlay() {
 
     useEffect(() => {
         fetch('/message.json').then((response) => {
-            response.json().then((data) => {
+            response.json()
+            .then((data) => {
                 setParagraphList(data);
                 const randomIndex = Math.floor(Math.random() * data.length);
                 setRandomParagraph(data[randomIndex].text);
-            }).catch(error => console.error('Error fetching data:', error));
+            })
+            .catch(error => console.error('Error fetching data:', error));
         })
     }, [])
 
