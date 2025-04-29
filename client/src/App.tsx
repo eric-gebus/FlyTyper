@@ -1,8 +1,8 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css'
-import Dashboard from './component/Dashboard'
-import Navbar from "./component/Navbar"
-import Footer from './component/Footer';
+import Dashboard from './component/Dashboard.tsx'
+import Navbar from "./component/Navbar.tsx"
+import Footer from './component/Footer.tsx';
 
 function App() {
 

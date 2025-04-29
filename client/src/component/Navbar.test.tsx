@@ -2,7 +2,7 @@ import { render, screen} from "@testing-library/react";
 import { describe, it, expect, beforeEach } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import { vi } from 'vitest';
-import Navbar from "./Navbar";
+import Navbar from "./Navbar.tsx";
 
 const mockUsedNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {

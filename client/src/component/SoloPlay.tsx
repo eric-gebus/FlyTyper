@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
-import Typer from './Typer'
+import Typer from './Typer.tsx'
+
+interface Data {
+  id: number;
+  text: string;
+}
 
 function SoloPlay() {
-    const [paragraphList, setParagraphList] = useState([]);
+
+    const [paragraphList, setParagraphList] = useState<Data[]>([]);
     const [randomParagraph, setRandomParagraph] = useState('');
     const [gameFinish, setGameFinish] = useState(false);
     const [wpm, setWpm] = useState(0);
@@ -26,7 +32,7 @@ function SoloPlay() {
 
     useEffect(() => {
         fetch('/message.json').then((response) => {
-            response.json().then((data) => {
+            response.json().then((data: Data[]) => {
                 setParagraphList(data);
                 const randomIndex = Math.floor(Math.random() * data.length);
                 setRandomParagraph(data[randomIndex].text);

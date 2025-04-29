@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
 import { vi } from 'vitest';
-import Home from "./Home";
+import Home from "./Home.tsx";
 
 const mockUsedNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
