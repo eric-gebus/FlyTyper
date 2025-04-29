@@ -22,7 +22,7 @@ function Navbar() {
                         <a className="navbar-item has-text-light is-size-5 custom-hover" href="/">
                             Home
                         </a>
-                        <a className="navbar-item has-text-light is-size-5 custom-hover">
+                        <a className="navbar-item has-text-light is-size-5 pl-3 custom-hover">
                             About
                         </a>
                         <a className="navbar-item has-text-light is-size-5 custom-hover" href="/">
