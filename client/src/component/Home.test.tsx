@@ -1,9 +1,9 @@
 import { render, screen} from "@testing-library/react";
-import Home from "./Home";
 import { describe, it, expect, beforeEach } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
 import { vi } from 'vitest';
+import Home from "./Home";
 
 const mockUsedNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {

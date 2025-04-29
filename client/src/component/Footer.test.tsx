@@ -1,7 +1,7 @@
 import { render, screen} from "@testing-library/react";
-import Footer from "./Footer";
 import { describe, it, expect } from "vitest";
 import "@testing-library/jest-dom/vitest";
+import Footer from "./Footer";
 
 describe ("Footer", () => {
 
