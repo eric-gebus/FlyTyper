@@ -1,13 +1,14 @@
-import {getByRole, render, screen} from "@testing-library/react";
+import {render, screen} from "@testing-library/react";
 import { describe, it, expect, beforeEach, beforeAll } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import { vi } from 'vitest';
 import Navbar from "./Navbar.tsx";
+import userEvent from "@testing-library/user-event";
 
-const mockUsedNavigate = vi.fn();
+const mockUseNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
    const actual = await vi.importActual("react-router-dom")
-   return {...actual, useNavigate: () => mockUsedNavigate}
+   return {...actual, useNavigate: () => mockUseNavigate}
 });
 
 
@@ -18,27 +19,33 @@ describe ("Navbar", () => {
   })
 
   beforeEach(() => {
-      mockUsedNavigate.mockClear();
+      mockUseNavigate.mockClear();
     })
 
-  it("should render the Fly Typer text", () => {
+  it("should render the Fly Typer text", async () => {
       const flyTyper = screen.getByRole('link', { name: /Fly Typer/i });
       expect(flyTyper).toBeInTheDocument();
-      expect(flyTyper.getAttribute("href")).toBe("/");
-      expect(flyTyper.textContent).toBe("Fly Typer");
-  })
-  
-  it("should render the Home text", () => {
+      expect(flyTyper).toHaveAttribute('href', '/');
+      expect(flyTyper).toHaveTextContent("Fly Typer");
+      await userEvent.click(flyTyper);
+      expect(mockUseNavigate).toHaveBeenCalledWith('/');
+    })
+
+  it("should render the Home text", async () => {
       const home = screen.getByRole('link', { name: /Home/i });
       expect(home).toBeInTheDocument();
-      expect(home.getAttribute("href")).toBe("/");
-      expect(home.textContent).toBe("Home");
+      expect(home).toHaveAttribute('href', '/');
+      expect(home).toHaveTextContent("Home");
+      await userEvent.click(home);
+      expect(mockUseNavigate).toHaveBeenCalledWith('/');
   })
 
-  it("should render the Login text", () => {
+  it("should render the Login text",async () => {
       const login = screen.getByRole('link', { name: /Login/i });
       expect(login).toBeInTheDocument();
-      expect(login.getAttribute("href")).toBe("/");
-      expect(login.textContent).toBe("Login");
+      expect(login).toHaveAttribute('href', '/');
+      expect(login).toHaveTextContent("Login");
+      await userEvent.click(login);
+      expect(mockUseNavigate).toHaveBeenCalledWith('/');
   })
 })
