@@ -3,10 +3,6 @@
   text-align: center;
   background-color: rgb(243, 241, 241);
 }
-.navbar-item.custom-hover {
-  border: 1px solid transparent; 
-  transition: all 0.2s ease;
-}
 
 .navbar-item.custom-hover:hover {
   background-color: #758BFD;
