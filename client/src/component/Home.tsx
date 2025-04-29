@@ -3,7 +3,7 @@ import typer from '../assets/typer.svg';
 
 
 function Home() {
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const soloPlayHandler = () => {
         console.log("soloplay clicked");

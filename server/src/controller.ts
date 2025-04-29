@@ -1,29 +1,6 @@
-require('dotenv').config();
-
-import express from 'express'
-import cors from 'cors';
-import http from 'http';
-import { Server } from 'socket.io';
-import { db } from './database';
 import { Socket } from "socket.io";
 import fs from 'fs';
-// const user = require('./model/user'); FUTURE FEATURE
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(cors());
-app.use(express.json());
-
-const server = http.createServer(app);
-
-export const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST"],
-    },
-});
-
+import { io } from './index';
 
 interface UserData {
   userWpm?: number;
@@ -44,12 +21,12 @@ interface RoomData {
 type Room = Record<string, RoomData>;
 
 const roomData: Room = {};
-const paragraphList = JSON.parse(fs.readFileSync(require.resolve('../message.json'), 'utf-8'));
 
 io.on('connection', (socket: Socket) => {
   //On join room
   console.log("User connected ", socket.id);
 
+  const paragraphList = JSON.parse(fs.readFileSync(require.resolve('../message.json'), 'utf-8'));
   socket.on('join', async () => {
       let room = Object.keys(roomData)
           .find((key) => {
@@ -118,9 +95,13 @@ io.on('connection', (socket: Socket) => {
               return users[key].timeTaken
 
           }).sort((a, b) => {
+              console.log("a sort: ", a, "b sort: ", b);
               return users[a].timeTaken ?? 0 - (users[b].timeTaken ?? 0);
-          }).forEach((userId, index) => {
+          }).map((userId, index) => {
+              console.log("user from map: ", userId);
+
               users[userId]["rank"] = index + 1;
+              console.log("user ranks: ", users[userId]["rank"]);
           })
 
           io.to(room).emit('roomData', roomData[room]);
@@ -144,13 +125,3 @@ io.on('connection', (socket: Socket) => {
       console.log("leave");
   })
 });
-
-
-db.sequelize.sync().then(() => {
-    console.log("SQL database is connected");
-    server.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-});
-
-

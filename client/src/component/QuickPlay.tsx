@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import Typer from './Typer';
 import io from 'socket.io-client';
+import Typer from './Typer.tsx';
 
 const socket = io.connect('http://localhost:3000');
 
