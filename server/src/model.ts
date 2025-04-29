@@ -6,7 +6,7 @@ import {
   Sequelize
 } from 'sequelize';
 
-const { sequelize } = require('./database.js');
+const { sequelize } = require('./database.ts');
 
 
 export class User extends Model<

@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize({
+export const sequelize = new Sequelize({
     dialect: 'postgres',
     database: 'flytyper_db',
     username: 'postgres',
@@ -24,10 +24,9 @@ interface Db {
   sequelize: Sequelize
 }
 
-const db: Db = {
+export const db: Db = {
   sequelize: sequelize
 };
 
-module.exports = db;
 
 
