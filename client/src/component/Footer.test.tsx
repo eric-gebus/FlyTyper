@@ -1,12 +1,16 @@
 import { render, screen} from "@testing-library/react";
-import Footer from "./Footer.tsx";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import "@testing-library/jest-dom/vitest";
+import Footer from "./Footer.tsx";
+
+
 
 describe ("Footer", () => {
-  
+  beforeAll(() => {
+    render(<Footer />)
+  })
+
   it("renders copyright", () => {
-    render(<Footer />);
     expect(screen.getByText(/© 2025 All Rights Reserved./i)).toBeInTheDocument();
   })
 

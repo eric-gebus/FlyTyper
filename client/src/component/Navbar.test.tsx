@@ -1,46 +1,51 @@
-import { render, screen, fireEvent} from "@testing-library/react";
-import Navbar from "./Navbar.tsx";
-import { describe, it, expect, beforeEach } from "vitest";
+import {render, screen} from "@testing-library/react";
+import { describe, it, expect, beforeEach, beforeAll } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import { vi } from 'vitest';
+import Navbar from "./Navbar.tsx";
+import userEvent from "@testing-library/user-event";
 
-const mockUsedNavigate = vi.fn();
+const mockUseNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
    const actual = await vi.importActual("react-router-dom")
-   return {...actual, useNavigate: () => mockUsedNavigate} 
+   return {...actual, useNavigate: () => mockUseNavigate}
 });
 
 
 describe ("Navbar", () => {
 
-    beforeEach(() => {
-        mockUsedNavigate.mockClear();
-    })
-
+  beforeAll(() => {
     render(<Navbar/>);
+  })
 
-    it("should render the Fly Typer text", () => {
-        const flyTyper = screen.getByTestId("nav-flyTyper")
-        expect(flyTyper).toBeInTheDocument();
-        expect(flyTyper.getAttribute("href")).toBe("/");
-        expect(flyTyper.textContent).toBe("Fly Typer");
-    
+  beforeEach(() => {
+      mockUseNavigate.mockClear();
     })
-    
-    it("should render the Home text", () => {
-        const home = screen.getByTestId("nav-home")
-        expect(home).toBeInTheDocument();
-        expect(home.getAttribute("href")).toBe("/");
-        expect(home.textContent).toBe("Home");
-    
+
+  it("should render the Fly Typer text", async () => {
+      const flyTyper = screen.getByRole('link', { name: /Fly Typer/i });
+      expect(flyTyper).toBeInTheDocument();
+      expect(flyTyper).toHaveAttribute('href', '/');
+      expect(flyTyper).toHaveTextContent("Fly Typer");
+      await userEvent.click(flyTyper);
+      expect(mockUseNavigate).toHaveBeenCalledWith('/');
     })
-    
-    it("should render the Login text", () => {
-        const login = screen.getByTestId("nav-login")
-        expect(login).toBeInTheDocument();
-        expect(login.getAttribute("href")).toBe("/");
-        expect(login.textContent).toBe("Login");
-    
-    })
-    
+
+  it("should render the Home text", async () => {
+      const home = screen.getByRole('link', { name: /Home/i });
+      expect(home).toBeInTheDocument();
+      expect(home).toHaveAttribute('href', '/');
+      expect(home).toHaveTextContent("Home");
+      await userEvent.click(home);
+      expect(mockUseNavigate).toHaveBeenCalledWith('/');
+  })
+
+  it("should render the Login text",async () => {
+      const login = screen.getByRole('link', { name: /Login/i });
+      expect(login).toBeInTheDocument();
+      expect(login).toHaveAttribute('href', '/');
+      expect(login).toHaveTextContent("Login");
+      await userEvent.click(login);
+      expect(mockUseNavigate).toHaveBeenCalledWith('/');
+  })
 })
