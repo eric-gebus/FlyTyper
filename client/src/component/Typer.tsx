@@ -231,8 +231,8 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
                 </div>
 
             </div>
-            <div className="mt-4 has-background-white">
-                <input className={`${userClassName || "user-input"} input`} autoComplete="off" disabled={gameFinish || timeRemaining === 0 || !gameStarted} type="text" name="userText" value={userInput} onChange={handleInput} onPaste={(e) => {
+            <div className="has-background-white is-large">
+                <input className={`${userClassName} input`} autoComplete="off" disabled={gameFinish || timeRemaining === 0 || !gameStarted} type="text" name="userText" value={userInput} onChange={handleInput} onPaste={(e) => {
                     e.preventDefault()
                     return false;
                 }} ref={inputReference} />
