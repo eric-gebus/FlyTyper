@@ -44,7 +44,7 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
                 return;
             }
         }
-        setUserClassName("has-background-white");
+        setUserClassName("has-background-white has-text-black");
     }
 
     function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
@@ -117,6 +117,7 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
             return () => clearInterval(interval);
         } else {
             inputReference.current?.focus();
+            setUserClassName("has-background-white has-text-black");
         }
     }, [gameStarted]);
 
@@ -200,13 +201,13 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
                 }
             </div>
 
-            <div className="message is-size-4 ">
+            <div className="message is-size-4">
                 <div className="message-header has-background-link has-text-light">
                     <p>Snippet</p>
                     <p>{new Date(timeRemaining * 1000).toISOString().substring(14, 19)}</p>
                 </div>
                 <div className="message-body has-background-white">
-                    <h3 className="is-size-5" >
+                    <h3 className="is-size-3" >
                         <strong>
                             {
                                 randomParagraph?.split('').map((char, index: number) => {
@@ -216,7 +217,7 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
                                     if (userChar == null) {
                                         className = 'has-text-black'; // not typed yet
                                     } else if (userChar === char) {
-                                        className = 'has-text-success-30'; // correct
+                                        className = 'has-text-success-50'; // correct
                                     } else {
                                         className = 'has-text-danger'; // incorrect
                                     }
@@ -230,25 +231,25 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
                 </div>
 
             </div>
-            <div className="mt-4">
-                <input className={`${userClassName} input`} autoComplete="off" disabled={gameFinish || timeRemaining === 0 || !gameStarted} type="text" name="userText" value={userInput} onChange={handleInput} onPaste={(e) => {
+            <div className="mt-4 has-background-white">
+                <input className={`${userClassName || "user-input"} input`} autoComplete="off" disabled={gameFinish || timeRemaining === 0 || !gameStarted} type="text" name="userText" value={userInput} onChange={handleInput} onPaste={(e) => {
                     e.preventDefault()
                     return false;
                 }} ref={inputReference} />
             </div>
 
-            <div className="columns  is-mobile mt-4 message">
+            <div className="columns is-mobile mt-4 message is-size-4">
                 <div className="column is-two-quarters has-text-centered">
-                    <h4 className="message-header has-background-link has-text-white" style={{ justifyContent: "center" }}>wpm</h4>
-                    <h4 className="message-body has-background-white has-text-black">{wpm} </h4>
+                    <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center" }}>WPM</h4>
+                    <h4 className="message-body has-background-white has-text-black p-3">{wpm} </h4>
                 </div>
                 <div className="column is-two-quarters has-text-centered">
-                    <h4 className="message-header has-background-link has-text-white" style={{ justifyContent: "center" }}>Accuracy </h4>
-                    <h4 className="message-body has-background-white has-text-black">{accuracy}%</h4>
+                    <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center" }}>Accuracy </h4>
+                    <h4 className="message-body has-background-white has-text-black p-3">{accuracy}%</h4>
                 </div>
                 <div className="column ">
-                    <h4 className="message-header has-background-link has-text-white" style={{ justifyContent: "center" }}>Time</h4>
-                    <h4 className="message-body has-background-white has-text-black">{new Date(timeTaken * 60 * 1000).toISOString().substring(14, 19)}</h4>
+                    <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center" }}>Time</h4>
+                    <h4 className="message-body has-background-white has-text-black p-3">{new Date(timeTaken * 60 * 1000).toISOString().substring(14, 19)}</h4>
                 </div>
             </div>
         </div>
