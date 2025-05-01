@@ -87,13 +87,13 @@ export default function QuickPlay() {
                   <div className="container">
                       <div className="columns"></div>
                       < div className="column is-8 is-offset-2 mt-4">
-                          <h1 className="is-size-2 has-text-weight-semibold is-family-secondary">Quick Play</h1>
+                          <h1 className="is-size-2 has-text-weight-semibold is-family-secondary has-text-black">Quick Play</h1>
                             {Object.keys(users).length > 0 ? (
                                 Object.keys(users).map((userid) => {
                                     return <div key={userid}>
                                         {userid === socket.id ? (
                                             <div className='columns is-mobile is-vcentered  is-10 is-offset-2 mt-4'>
-                                                <h4 className='column is-one-quarter has-text-weight-semibold'>you : {roomData.users[userid].userWpm} wpm</h4>
+                                                <h4 className='column is-one-quarter has-text-weight-semibold has-text-black'>You : {roomData.users[userid].userWpm} wpm</h4>
                                                 <div className="column is-6">
                                                     <progress value={roomData.users[userid].userProgress} max={100} className="progress is-6 is-success is-normal has-background-white is-two-quater"/>
                                                 </div>
