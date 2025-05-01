@@ -24,7 +24,7 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
     const [timeTaken, setTimeTaken] = useState<number>(0);
 
     const initialTime = 3 * 60;
-  
+
     const inputReference = useRef<HTMLInputElement>(null);
 
     const [timeRemaining, setTimeRemaining] = useState(initialTime);
@@ -134,7 +134,7 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
         let wordcount = correctWordArr.length;
 
         let timeTaken = ((Date.now() - startTime) / 1000) / 60;
- 
+
         let currwpm = Math.round((wordcount / timeTaken));
         console.log("currwpm:", currwpm + " wpm");
         if (gameStarted) {
@@ -146,13 +146,13 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
 
     //calculate accuracy
     useEffect(() => {
-        
+
         if (correctWordArr.length > 0) {
             const totalWordCount = wordsArr.length;
             const wrongWordsCount = characterErrorCount / 5;
-            
+
             const wordAccuracy = Math.round(((totalWordCount - wrongWordsCount) / totalWordCount) * 100);
-            
+
             setAccuracy(wordAccuracy);
         }
 
