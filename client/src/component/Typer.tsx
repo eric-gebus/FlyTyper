@@ -11,28 +11,33 @@ interface TyperProps {
   gameStarted: boolean
 }
 
-function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, handleProgress, startTime, gameStarted }: TyperProps) {
+function Typer({
+  randomParagraph,
+  gameFinish,
+  handleGameFinish,
+  wpm,
+  handleWpm,
+  handleProgress,
+  startTime,
+  gameStarted
+}: TyperProps) {
 
-    const [userClassName, setUserClassName] = useState<string>("user-input");
+    const [userClassName, setUserClassName] = useState<string>("user-input has-background-white has-text-black");
     const [wordsArr, setWordsArr] = useState<string[]>([]);
     const [wordsArrIndex, setWordsArrIndex] = useState<number>(0);
-    const [correctWordArr, setcorrectWordArr] = useState<string[]>([]);
+    const [correctWordArr, setCorrectWordArr] = useState<string[]>([]);
     const [userInput, setUserInput] = useState<string>("");
     const [accuracy, setAccuracy] = useState<number>(100);
     const [characterErrorCount, setCharacterErrorCount] = useState<number>(0);
     const [now, setNow] = useState<number>(Date.now());
     const [timeTaken, setTimeTaken] = useState<number>(0);
-
-    const initialTime = 3 * 60;
-
+    const [timeRemaining, setTimeRemaining] = useState(3 * 60);
     const inputReference = useRef<HTMLInputElement>(null);
 
-    const [timeRemaining, setTimeRemaining] = useState(initialTime);
+    const countdownSeconds = Math.max(0, Math.floor((startTime - now) / 1000));
+    const inputDisabled = countdownSeconds > 0 || gameFinish || timeRemaining === 0 || !gameStarted;
 
-    const buttonHandler = () => {
-        console.log("button clicked");
-        window.location.reload();
-    }
+    const reloadGame = () => window.location.reload();
 
     function handleCharacterError(value: string) {
         let currWord = wordsArr[wordsArrIndex];
@@ -48,212 +53,184 @@ function Typer({ randomParagraph, gameFinish, handleGameFinish, wpm, handleWpm, 
     }
 
     function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
-        let value = event.target.value;
-        console.log("typeof:", typeof (value))
-        console.log("value: ", value);
+      if (countdownSeconds > 0) return;
 
+        let value = event.target.value;
         setUserInput(value);
 
         if (value.includes(" ")) {
-            let userWord = userInput.trim();
-            console.log('userInput: ', userWord);
-            if (userWord === wordsArr[wordsArrIndex]) {
-                console.log(userWord + ": is equal to :" + wordsArr[wordsArrIndex]);
-                setcorrectWordArr([...correctWordArr, userWord]);
-                setWordsArrIndex((wordsArrIndex) => wordsArrIndex + 1);
-                value = '';
-                setUserInput(value);
-            } else {
-                console.log(userWord + ": is not equal to :" + wordsArr[wordsArrIndex]);
-            }
+          const userWord = userInput.trim();
+          if (userWord === wordsArr[wordsArrIndex]) {
+            setCorrectWordArr(prev => [...prev, userWord]);
+            setWordsArrIndex(prev => prev + 1);
+            setUserInput("");
+          }
         }
 
         handleCharacterError(value);
 
-        if (wordsArrIndex === wordsArr.length - 1) {
-            console.log("userInput: ", value);
-            console.log("wordsArr[wordsArrIndex]: ", wordsArr[wordsArrIndex]);
-            if (value === wordsArr[wordsArrIndex]) {
-                console.log(value + ": is equal to :" + wordsArr[wordsArrIndex]);
-                console.log("You win");
-                setcorrectWordArr([...correctWordArr, value]);
-                setUserInput("");
-                handleGameFinish();
-                // alert("you won");
-            } else {
-                console.log(value + ": is not equal to :" + wordsArr[wordsArrIndex]);
-            }
+        if (wordsArrIndex === wordsArr.length - 1 && value === wordsArr[wordsArrIndex]) {
+          setCorrectWordArr(prev => [...prev, value]);
+          setUserInput("");
+          handleGameFinish();
         }
-    }
+      };
 
-    useEffect(() => {
+      useEffect(() => {
         if (gameStarted) {
-            const timerInterval = setInterval(() => {
-                setTimeRemaining((prevTime) => {
-                    if (gameFinish) {
-                        clearInterval(timerInterval);
-                        console.log('game completed!');
-                        return timeRemaining;
-                    } else if (prevTime === 0) {
-                        clearInterval(timerInterval);
-                        console.log('Countdown complete!');
-                        return 0;
-                    } else {
-                        return prevTime - 1;
-                    }
-                });
-            }, 1000);
-
-            return () => clearInterval(timerInterval);
+          const timerInterval = setInterval(() => {
+            setTimeRemaining(prev => {
+              if (gameFinish || prev === 0) {
+                clearInterval(timerInterval);
+                return prev;
+              }
+              return prev - 1;
+            });
+          }, 1000);
+          return () => clearInterval(timerInterval);
         }
+      }, [gameFinish, gameStarted]);
 
-    }, [gameFinish, gameStarted]);
-
-    useEffect(() => {
+      useEffect(() => {
         if (!gameStarted) {
-            const interval = setInterval(() => {
-                setNow(Date.now());
-            }, 1000);
-            return () => clearInterval(interval);
+          const interval = setInterval(() => setNow(Date.now()), 1000);
+          return () => clearInterval(interval);
         } else {
-            inputReference.current?.focus();
-            setUserClassName("has-background-white has-text-black");
+          inputReference.current?.focus();
         }
-    }, [gameStarted]);
+      }, [gameStarted]);
 
-
-    useEffect(() => {
+      useEffect(() => {
         if (randomParagraph) {
-            let words = randomParagraph.split(" ");
-            setWordsArr(words);
-            console.log("wordsarr: ", wordsArr);
+          setWordsArr(randomParagraph.split(" "));
         }
-    }, [randomParagraph]);
+      }, [randomParagraph]);
 
     //calculate wpm
     useEffect(() => {
-        let wordcount = correctWordArr.length;
-
-        let timeTaken = ((Date.now() - startTime) / 1000) / 60;
-
-        let currwpm = Math.round((wordcount / timeTaken));
-        console.log("currwpm:", currwpm + " wpm");
-        if (gameStarted) {
-            setTimeTaken(timeTaken);
-        }
-        // setWpm(currwpm);
-        handleWpm(currwpm);
+      if (gameStarted) {
+        const wordCount = correctWordArr.length;
+        const timeInMinutes = (Date.now() - startTime) / 60000;
+        const currentWpm = Math.round(wordCount / timeInMinutes);
+        setTimeTaken(timeInMinutes);
+        handleWpm(currentWpm);
+      }
     }, [timeRemaining, gameStarted]);
 
     //calculate accuracy
     useEffect(() => {
-
-        if (correctWordArr.length > 0) {
-            const totalWordCount = wordsArr.length;
-            const wrongWordsCount = characterErrorCount / 5;
-
-            const wordAccuracy = Math.round(((totalWordCount - wrongWordsCount) / totalWordCount) * 100);
-
-            setAccuracy(wordAccuracy);
-        }
-
+      if (correctWordArr.length > 0) {
+        const totalWords = wordsArr.length;
+        const wrongWords = characterErrorCount / 5;
+        const calculatedAccuracy = Math.round(((totalWords - wrongWords) / totalWords) * 100);
+        setAccuracy(calculatedAccuracy);
+      }
     }, [timeRemaining]);
+
 
     //progress
     useEffect(() => {
-        if (correctWordArr.length > 0) {
-            let newProgress = Math.round((correctWordArr.length / wordsArr.length) * 100);
-            console.log("newprogress:", newProgress);
-            handleProgress(newProgress);
-        }
+      if (correctWordArr.length > 0) {
+        const progress = Math.round((correctWordArr.length / wordsArr.length) * 100);
+        handleProgress(progress);
+      }
     }, [correctWordArr]);
+
+    const renderCountdown = () => (
+      <h2 className="has-text-weight-semibold is-size-4 has-text-success">
+        Game starts in: {Math.max(0, Math.floor((startTime - now) / 1000))}s
+      </h2>
+    );
+
+    const renderStarted = () => (
+      <h2 className="has-text-weight-semibold is-size-4 has-text-info">
+        Game started!
+      </h2>
+    );
+
+    const renderGameResult = () => (
+      <div className="has-text-centered">
+        <h1 className={`has-text-weight-semibold is-size-4 ${gameFinish ? "has-text-success" : "has-text-danger"}`}>
+          {gameFinish ? "You Finished the race yayy..." : "Oopsie... Timeout"}
+        </h1>
+        <button
+          className="button has-background-link has-text-light is-medium m-5"
+          onClick={reloadGame}
+        >
+          Play Again
+        </button>
+      </div>
+    );
+
+    const getCharClassName = (char: string, index: number) => {
+      const userChar = correctWordArr.length === 0
+        ? userInput[index]
+        : (correctWordArr.join(' ') + " " + userInput)[index];
+
+      if (userChar == null) return 'has-text-black';
+      return userChar === char ? 'has-text-success-50' : 'has-text-danger';
+    };
 
 
     return (
-        <div className="hero-body" >
-            <div className="columns column is-8 has-text-centered">
-                {!gameStarted && startTime && (
-                    <h2 className="has-text-weight-semibold is-size-4 has-text-success">
-                        Game starts in: {Math.max(0, Math.floor((startTime - now) / 1000))}s
-                    </h2>
-                )}{gameStarted && !gameFinish && timeRemaining > 0 && (
-                    <h2 className="has-text-weight-semibold is-size-4 has-text-info">
-                        Game started!
-                    </h2>
-                )}
-            </div>
-
-            <div>
-                {gameFinish &&
-                <div>
-                    <h1 className="has-text-weight-semibold is-size-4 has-text-success">You Finished the race yayy... </h1>
-                    <button className="button is-yellow has-background-link has-text-light is-medium mb-4 " onClick={buttonHandler}>Play Again</button>
-                </div>
-                }
-            </div>
-
-            <div>
-                {timeRemaining == 0 &&
-                <div>
-                    <h1 className="has-text-weight-semibold is-size-4 has-text-danger ">Oopsie... Timeout </h1>
-                    <button className="button has-background-link has-text-light is-medium m-5 " onClick={buttonHandler}>Play Again</button>
-                </div>
-                }
-            </div>
-
-            <div className="message is-size-4">
-                <div className="message-header has-background-link has-text-light">
-                    <p>Snippet</p>
-                    <p>{new Date(timeRemaining * 1000).toISOString().substring(14, 19)}</p>
-                </div>
-                <div className="message-body has-background-white">
-                    <h3 className="is-size-3" >
-                        <strong>
-                            {
-                                randomParagraph?.split('').map((char, index: number) => {
-                                    const userChar = correctWordArr.length == 0 ? userInput[index] : (correctWordArr.join(' ') + " " + userInput)[index];
-                                    let className = '';
-
-                                    if (userChar == null) {
-                                        className = 'has-text-black'; // not typed yet
-                                    } else if (userChar === char) {
-                                        className = 'has-text-success-50'; // correct
-                                    } else {
-                                        className = 'has-text-danger'; // incorrect
-                                    }
-                                    return (
-                                        <span key={index} className={className}>
-                                            {char}
-                                        </span>
-                                    );
-                                })}
-                        </strong></h3>
-                </div>
-
-            </div>
-            <div className="has-background-white is-large">
-                <input className={`${userClassName} input`} autoComplete="off" disabled={gameFinish || timeRemaining === 0 || !gameStarted} type="text" name="userText" value={userInput} onChange={handleInput} onPaste={(e) => {
-                    e.preventDefault()
-                    return false;
-                }} ref={inputReference} />
-            </div>
-
-            <div className="columns is-mobile mt-4 message is-size-4">
-                <div className="column is-two-quarters has-text-centered">
-                    <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center" }}>WPM</h4>
-                    <h4 className="message-body has-background-white has-text-black p-3">{wpm} </h4>
-                </div>
-                <div className="column is-two-quarters has-text-centered">
-                    <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center" }}>Accuracy </h4>
-                    <h4 className="message-body has-background-white has-text-black p-3">{accuracy}%</h4>
-                </div>
-                <div className="column ">
-                    <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center" }}>Time</h4>
-                    <h4 className="message-body has-background-white has-text-black p-3">{new Date(timeTaken * 60 * 1000).toISOString().substring(14, 19)}</h4>
-                </div>
-            </div>
+      <div className="hero-body">
+        <div className="columns column is-8 has-text-centered">
+          {!gameStarted && startTime && renderCountdown()}
+          {gameStarted && !gameFinish && timeRemaining > 0 && renderStarted()}
+          {(gameFinish || timeRemaining === 0) && renderGameResult()}
         </div>
-    )
-}
+
+        <div className="message is-size-4">
+          <div className="message-header has-background-link has-text-light">
+            <p>Snippet</p>
+            <p>{new Date(timeRemaining * 1000).toISOString().substring(14, 19)}</p>
+          </div>
+          <div className="message-body has-background-white">
+            <h3 className="is-size-3">
+              <strong>
+                {randomParagraph?.split('').map((char, index) => (
+                  <span key={index} className={getCharClassName(char, index)}>
+                    {char}
+                  </span>
+                ))}
+              </strong>
+            </h3>
+          </div>
+        </div>
+
+        <div className="has-background-white is-large">
+          <input
+            className={`${userClassName} input has-text-black`}
+            autoComplete="off"
+            disabled={inputDisabled}
+            type="text"
+            name="userText"
+            value={userInput}
+            onChange={handleInput}
+            onPaste={(e) => e.preventDefault()}
+            ref={inputReference}
+            placeholder={countdownSeconds > 0 ? `Get ready... ${countdownSeconds}s` : "Start typing..."}
+          />
+        </div>
+
+        <div className="columns is-mobile mt-4 message is-size-4">
+          <div className="column is-two-quarters has-text-centered">
+            <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center" }}>WPM</h4>
+            <h4 className="message-body has-background-white has-text-black p-3">{wpm}</h4>
+          </div>
+          <div className="column is-two-quarters has-text-centered">
+            <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center" }}>Accuracy</h4>
+            <h4 className="message-body has-background-white has-text-black p-3">{accuracy}%</h4>
+          </div>
+          <div className="column has-text-centered">
+            <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center" }}>Time</h4>
+            <h4 className="message-body has-background-white has-text-black p-3">
+              {new Date(timeTaken * 60 * 1000).toISOString().substring(14, 19)}
+            </h4>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
 export default Typer
