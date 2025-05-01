@@ -146,9 +146,15 @@ function Typer({
       </div>
     );
 
+    const renderStarted = () => (
+      <h2 className="has-text-weight-semibold is-size-4 has-text-info">
+        Game started!
+      </h2>
+    )
+
     const renderGameOver = () => (
       <div>
-        <h1 className="has-text-weight-semibold is-size-4 has-text-success">
+        <h1 className={`has-text-weight-semibold is-size-4 ${gameFinish ? "has-text-success" : "has-text-danger"}`}>
           {gameFinish ? "You Finished the race yayy..." : "Oopsie... Timeout"}
         </h1>
         <button
@@ -166,14 +172,17 @@ function Typer({
         : (correctWordArr.join(' ') + " " + userInput)[index];
 
       if (userChar == null) return 'has-text-black';
-      return userChar === char ? 'has-text-success-30' : 'has-text-danger';
+      return userChar === char ? 'has-text-success-50' : 'has-text-danger';
     };
 
 
     return (
       <div className="hero-body">
-      {!gameStarted && startTime && renderCountdown()}
-      {(gameFinish || timeRemaining === 0) && renderGameOver()}
+        <div className="columns column is-8 has-text-centered">
+          {!gameStarted && startTime && renderCountdown()}
+          {gameStarted && !gameFinish && timeRemaining > 0 && renderStarted()}
+          {(gameFinish || timeRemaining === 0) && renderGameOver()}
+        </div>
 
       <div className="message is-size-4">
         <div className="message-header has-background-link has-text-light">
@@ -181,7 +190,7 @@ function Typer({
           <p>{new Date(timeRemaining * 1000).toISOString().substring(14, 19)}</p>
         </div>
         <div className="message-body has-background-white">
-          <h3 className="is-size-5">
+          <h3 className="is-size-3">
             <strong>
               {randomParagraph?.split('').map((char, index) => (
                 <span key={index} className={getCharClassName(char, index)}>
@@ -208,18 +217,18 @@ function Typer({
           />
       </div>
 
-      <div className="columns is-mobile mt-4 message">
+      <div className="columns is-mobile mt-4 message is-size-4">
           <div className="column is-two-quarters has-text-centered">
-              <h4 className="message-header has-background-link has-text-white is-centered has-text-weight-semibold">wpm</h4>
-              <h4 className="message-body has-background-white">{wpm} </h4>
+              <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center"}}>WPM</h4>
+              <h4 className="message-body has-background-white has-text-black p-3">{wpm} </h4>
           </div>
           <div className="column is-two-quarters has-text-centered">
-              <h4 className="message-header has-background-link has-text-white has-text-centered">Accuracy </h4>
-              <h4 className="message-body has-background-white">{accuracy}%</h4>
+              <h4 className="message-header has-background-link has-text-white p-3" style={{ justifyContent: "center"}}>Accuracy </h4>
+              <h4 className="message-body has-background-white has-text-black p-3">{accuracy}%</h4>
           </div>
           <div className="column ">
-              <h4 className=" message-header has-background-link has-text-white has-text-centered">Time</h4>
-              <h4 className="message-body has-background-white">
+              <h4 className=" message-header has-background-link has-text-white p-3" style={{ justifyContent: "center"}}>Time</h4>
+              <h4 className="message-body has-background-white has-text-black p-3">
                 {new Date(timeTaken * 60 * 1000).toISOString().substring(14, 19)}
               </h4>
           </div>
