@@ -34,7 +34,7 @@
 
 ![My page](client/src/assets/page.png)
 
-![My page](client/src/assets/solopage.png)
+![My page](client/src/assets/solo_page.png)
 
 ![My page](client/src/assets/quickplay.png)
 
