@@ -5,13 +5,13 @@
 
 ## Tech Stack
 
-- Frontend: React, Vite, TypeScript, bulma
+**Client:** React, Vite, TypeScript, bulma
 
-- Backend: Node.js, Express, Postgres, Sequelize
+**Backend:** Node.js, Express, Postgres, Sequelize
 
-- Multiplayer functionality: Socket.io
+**Multiplayer functionality:** Socket.io
 
-- Testing: Vitest
+**Testing:** Vitest
 
 
 ## Getting started
