@@ -3,8 +3,6 @@ import { describe, it, expect, beforeAll } from "vitest";
 import "@testing-library/jest-dom/vitest";
 import Footer from "./Footer.tsx";
 
-
-
 describe ("Footer", () => {
   beforeAll(() => {
     render(<Footer />)

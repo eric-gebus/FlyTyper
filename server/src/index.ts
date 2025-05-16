@@ -7,7 +7,6 @@ import { Server } from 'socket.io';
 import { db } from './database';
 import { Socket } from "socket.io";
 import fs from 'fs';
-// const user = require('./model/user'); FUTURE FEATURE
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -72,12 +71,11 @@ io.on('connection', (socket: Socket) => {
           const randomPara = paragraphList[randomIndex].text;
           console.log("random para server: ", randomPara);
 
-          roomData[room] = { //AI code
+          roomData[room] = {
               startTime: startTime,
               gameStarted: false,
               roomParagraph: randomPara,
               users: {
-                  // abc: { time: 0 }
               }
           }
       }
@@ -88,7 +86,7 @@ io.on('connection', (socket: Socket) => {
       console.log(id + ' joined room: ' + room);
 
       roomData[room].users[id] = {};
-      //initialise the values
+
       roomData[room].users[id].userWpm = 0;
       roomData[room].users[id].userProgress = 0;
 
@@ -96,8 +94,6 @@ io.on('connection', (socket: Socket) => {
 
       io.to(room).emit('roomData', roomData[room]);
 
-      //game Finish
-      // .=>string []-variable
       socket.on("gameFinish", (userId, timeTaken) => {
 
           if (!room || !roomData[room] || !roomData[room].users) {
@@ -129,13 +125,11 @@ io.on('connection', (socket: Socket) => {
 
       socket.on("trackWpm", (currWpm) => {
           roomData[room].users[socket.id].userWpm = currWpm;
-          // console.log("curr wpm in server: ", roomData[room].users[socket.id].userWpm);
           io.to(room).emit('roomData', roomData[room]);
       })
 
       socket.on("trackProgress", (currProgress) => {
           roomData[room].users[socket.id].userProgress = currProgress;
-          // console.log("currprogress in server: ", roomData[room].users[socket.id].userProgress);
           io.to(room).emit('roomData', roomData[room]);
       })
   });
